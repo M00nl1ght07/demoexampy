@@ -14,6 +14,7 @@ class MainApplicationClass(QWidget):
         self.resize(QSize(1024, 768))
         self.setMaximumSize(QSize(1024, 768))
 
+
         frame_1 = MainWindowFrame(self, controller = None)
 
         self.frame_container = QStackedWidget()
@@ -24,13 +25,15 @@ class MainApplicationClass(QWidget):
         self.setLayout(self.layout)
 
         self.setObjectName("main_window")
+
+
 styles = """
 background-color: black;
 color: white;
 """
 if __name__ == "__main__":
     application = QApplication(sys.argv)
-
+    application.setWindowIcon(QIcon("./res/icon.ico"))
     start_window = MainApplicationClass()
     start_window.show()
     start_window.setStyleSheet(styles)
