@@ -23,7 +23,7 @@ class MainWindowFrame(QFrame):
         )
 
         self.click_btn.clicked.connect(
-            lambda : self.finish_label.setText("NOT")
+            lambda : self.first_label.setText("NOT")
         )
 
         self.first_label = QLabel("Первый текст")

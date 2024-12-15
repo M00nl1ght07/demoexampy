@@ -1,5 +1,7 @@
 import sys
-from PySide6.QtWidgets import QVBoxLayout, QWidget, QApplication, QStackedWidget
+
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QVBoxLayout, QWidget, QApplication, QStackedWidget, QSystemTrayIcon
 from PySide6.QtCore import QSize
 from frames.startframe import MainWindowFrame
 
@@ -8,7 +10,7 @@ class MainApplicationClass(QWidget):
     def __init__(self):
         QWidget.__init__(self)
         self.setWindowTitle("PR1")
-        # self.setWindowIcon(QIcon("icon.png"))
+        self.setWindowIcon(QIcon("./res/icon.ico"))
         self.resize(QSize(1024, 768))
         self.setMaximumSize(QSize(1024, 768))
 
