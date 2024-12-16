@@ -1,4 +1,3 @@
-# импорт библиотек
 from PySide6.QtWidgets import (
     QVBoxLayout,
     QFrame,
@@ -14,59 +13,58 @@ class interface(QFrame):
         self.controller = controller
         self.update_start_values()
 
-        # добавление виджет лаяута во фрейм
-        self.setLayout(self.widgets_layout_conainer)
+        # Установка разметки
+        self.setLayout(self.widgets_layout)
 
-    # в нем хранятся все элементы интерфейса
+    # метод обновления интерфейса
     def update_start_values(self):
-        # вртикальная разметка контейнера
-        self.widgets_layout_conainer = QVBoxLayout(self)
+        # установка вертикальной разметки
+        self.widgets_layout = QVBoxLayout(self)
 
-        # создание заголовка
+        # заголовок фрейма
         self.heading = QLabel("Партнеры")
+        # установка объектного имени для заголовка
         self.heading.setObjectName("heading1")
         # добавление заголовка в котнейнер
-        self.widgets_layout_conainer.addWidget(self.heading)
+        self.widgets_layout.addWidget(self.heading)
 
-        # перемнная с функцией добавления скролла
-        self.ScrollArea = self.create_scroll_area()
+        # добавление скролла
+        self.scroll_area = self.create_scroll()
         # добавление скролла в контейнер
-        self.widgets_layout_conainer.addWidget(self.ScrollArea)
+        self.widgets_layout.addWidget(self.scroll_area)
 
         # создание кнопки внизу фрейма
         self.btn = QPushButton("Добавить партнера")
-        self.btn.clicked.connect(
-            lambda : print("123"))
+        # self.btn.clicked.connect(
+        #     lambda : print("123"))
         # добавление кнопки в контейнер
-        self.widgets_layout_conainer.addWidget(self.btn)
+        self.widgets_layout.addWidget(self.btn)
 
         # добавление карточки в контейнер скролла
-        self.ScrollArea.setWidget(self.create_partner_card())
+        self.scroll_area.setWidget(self.create_partner_card())
 
 
-    '''Функция создания скрола'''
-    def create_scroll_area(self):
+    # метод создания скролла
+    def create_scroll(self):
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
-
         return scroll_area
 
-    '''Функция создания контейнера карточек товара'''
+    # метод создания контейнера карточки
     def create_scroll_area_widget_container(self):
         scroll_area_widget_container = QWidget()
         return scroll_area_widget_container
 
-    '''Создание кароточки товара'''
+    # метод создания карточки
     def create_partner_card(self):
-        # создали контейнер для карточки товара
+        # контейнер для карточки
         self.scroll_area_widget_container = (self.create_scroll_area_widget_container())
-        # установка вертикальной разметки для контейнера карточек
+        # установка вертикальной разметки
         self.card_layout = QVBoxLayout(self.scroll_area_widget_container)
 
-
-        # цикл для вывода карточек партнеров
-        for partner in range(15):
-            # создание виджета (поле карточки)
+        # цикл вывода карточек партнеров
+        for partner in range(0,15):
+            # создание поля карточки
             self.partner_card = QWidget()
             self.partner_card.setObjectName("partner_card")
             # вертикальная разметка для карточки
@@ -84,8 +82,8 @@ class interface(QFrame):
             # кнопка
             self.btn = QPushButton("Подробнее")
             self.btn.setObjectName("card_btn")
-            self.btn.clicked.connect(
-                lambda : print("1234"))
+            # self.btn.clicked.connect(
+            #     lambda : print("1234"))
             self.vbox.addWidget(self.btn)
             # добавление карточки в лайаут для карточки
             self.card_layout.addWidget(self.partner_card)
