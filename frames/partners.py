@@ -4,13 +4,14 @@ from PySide6.QtWidgets import (
     QWidget,
     QPushButton,
     QLabel,
-    QScrollArea
+    QScrollArea, QHBoxLayout
 )
 
 class interface(QFrame):
     def __init__ (self, parent, controller):
         QFrame.__init__(self, parent)
         self.controller = controller
+        self.connection = controller.connection
         self.update_start_values()
 
         # Установка разметки
@@ -63,28 +64,63 @@ class interface(QFrame):
         self.card_layout = QVBoxLayout(self.scroll_area_widget_container)
 
         # цикл вывода карточек партнеров
-        for partner in range(0,15):
+        for partners in self.connection.take_partner_information():
             # создание поля карточки
             self.partner_card = QWidget()
             self.partner_card.setObjectName("partner_card")
             # вертикальная разметка для карточки
             self.vbox = QVBoxLayout(self.partner_card)
-            # первый лебл
-            self.label1 = QLabel("Название компании")
-            self.vbox.addWidget(self.label1)
+
+            self.horizontal_layout = QHBoxLayout()
+            # первый лейбл для названия компании
+            self.label1 = QLabel(f'{partners["type"]} | {partners["name"].replace("  ", " ")}')
+            self.horizontal_layout.addWidget(self.label1)
             self.label1.setObjectName("company_name")
+
+            # пятый лейбл для процента
+            sale_percentage = self.take_sale_cont(partners["name"])
+            self.label5 = QLabel(f'{sale_percentage}%')
+            self.horizontal_layout.addWidget(self.label5)
+            self.label5.setObjectName("company_percentage")
+            self.vbox.addLayout(self.horizontal_layout)
+
             # второй лейбл
-            self.label2 = QLabel("15%")
+            self.label2 = QLabel(f'{partners["director"]}')
             self.vbox.addWidget(self.label2)
-            self.label2.setObjectName("procent")
+            self.label2.setObjectName("company_director")
+
             # третий лебл
-            self.vbox.addWidget(QLabel("Описание"))
-            # кнопка
-            self.btn = QPushButton("Подробнее")
-            self.btn.setObjectName("card_btn")
-            # self.btn.clicked.connect(
-            #     lambda : print("1234"))
-            self.vbox.addWidget(self.btn)
+            self.label3 = QLabel(f'+7 {partners["phone"]}')
+            self.vbox.addWidget(self.label3)
+            self.label3.setObjectName("company_phone")
+
+            # четвертый лейбл
+            self.label4 = QLabel(f'Рейтинг: {partners["rate"]}')
+            self.vbox.addWidget(self.label4)
+            self.label4.setObjectName("company_rate")
+
+
+            # # кнопка
+            # self.btn = QPushButton("Подробнее")
+            # self.btn.setObjectName("card_btn")
+            # self.vbox.addWidget(self.btn)
+
             # добавление карточки в лайаут для карточки
             self.card_layout.addWidget(self.partner_card)
         return self.scroll_area_widget_container
+
+    # def ptint_btn_obj_name(self):
+    #     sender = self.sender()
+    #     print("button name: ", sender.objectName())
+
+    def take_sale_cont(self, partner_name: str):
+        count: int = self.connection.sale_sum(partner_name)[0]['procent']
+        if (count == None):
+            return 0
+        if (count > 300000):
+            return 15
+        if (count > 50000):
+            return 10
+        if (count > 10000):
+            return 5
+        return 5

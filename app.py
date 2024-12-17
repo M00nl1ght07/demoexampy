@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import QSize
 from frames import partners
+from db import database
 
 # Класс основного окна
 class MainApplicationClass(QWidget):
@@ -18,8 +19,9 @@ class MainApplicationClass(QWidget):
         # Установка максимального размера окна
         self.setMaximumSize(QSize(1024, 768))
 
+        self.connection = database.Database()
         # Создание экземпляра фрейма partners и передача его в переменную
-        partners_frame = partners.interface(self, controller=None)
+        partners_frame = partners.interface(self, self)
 
         # Создание контейнера QStackedWidget и добавление в него фрейма partners
         self.frame_container = QStackedWidget()
@@ -40,39 +42,35 @@ styles = '''
 #mainaapplication {
     background: #F4E8D3;
 }
-QFrame {
-background: #F4E8D3;
-}
 QLabel {
     color: #000000;
     font-size: 20px;
     qproperty-alignment: AlignLeft;
-    }
-    
+    } 
 QPushButton{
     background: #67BA80;
     color: #000000;
     font-size: 20px;
 }
+#label_procent{
+    qproperty-alignment: AlignRight;
+}
 
 #partner_card {
     background: #F4E8D3;
-    border: 1px solid #000000;
 }
-
 #card_btn {
     background: #67BA80;
     color: #000000;
     font-size: 20px;
 }
-
 #heading1 {
     color: #000000;
     qproperty-alignment: AlignCenter;
     font-size: 30px;
     font-weight: bold;
 }
-#procent{
+#company_percentage{
     qproperty-alignment: AlignRight;
 }
 
