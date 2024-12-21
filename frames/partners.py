@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QScrollArea, QHBoxLayout
 )
+from frames import addPartner
 
 class interface(QFrame):
     def __init__ (self, parent, controller):
@@ -36,8 +37,7 @@ class interface(QFrame):
 
         # создание кнопки внизу фрейма
         self.btn = QPushButton("Добавить партнера")
-        # self.btn.clicked.connect(
-        #     lambda : print("123"))
+        self.btn.clicked.connect(self.open_new_frame)
         # добавление кнопки в контейнер
         self.widgets_layout.addWidget(self.btn)
 
@@ -100,10 +100,10 @@ class interface(QFrame):
             self.label4.setObjectName("company_rate")
 
 
-            # # кнопка
-            # self.btn = QPushButton("Подробнее")
-            # self.btn.setObjectName("card_btn")
-            # self.vbox.addWidget(self.btn)
+            # кнопка
+            self.btn = QPushButton("Подробнее")
+            self.btn.setObjectName("card_btn")
+            self.vbox.addWidget(self.btn)
 
             # добавление карточки в лайаут для карточки
             self.card_layout.addWidget(self.partner_card)
@@ -112,6 +112,8 @@ class interface(QFrame):
     # def ptint_btn_obj_name(self):
     #     sender = self.sender()
     #     print("button name: ", sender.objectName())
+    def open_new_frame(self):
+        self.controller.switch_to_new_frame(addPartner.interface_reg_parther)
 
     def take_sale_cont(self, partner_name: str):
         count: int = self.connection.sale_sum(partner_name)[0]['procent']

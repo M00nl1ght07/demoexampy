@@ -7,6 +7,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import QSize
 from frames import partners
 from db import database
+from frames import addPartner
 
 # Класс основного окна
 class MainApplicationClass(QWidget):
@@ -21,11 +22,12 @@ class MainApplicationClass(QWidget):
 
         self.connection = database.Database()
         # Создание экземпляра фрейма partners и передача его в переменную
-        partners_frame = partners.interface(self, self)
+        self.partners_frame = partners.interface(self, self)
+        self.addPartner = addPartner.interface_reg_parther(self, self)
 
         # Создание контейнера QStackedWidget и добавление в него фрейма partners
         self.frame_container = QStackedWidget()
-        self.frame_container.addWidget(partners_frame)
+        self.frame_container.addWidget(self.partners_frame)
 
         # Создание вертикального расположения для элементов интерфейса
         self.layout = QVBoxLayout()
@@ -38,9 +40,18 @@ class MainApplicationClass(QWidget):
         # Установка объектного имени для стилизации через CSS
         self.setObjectName("mainaapplication")
 
+    def switch_to_new_frame(self, frame, current_partner_name : str = None):
+        current_partner_to_show = frame(self, self)
+        self.frame_container.removeWidget(current_partner_to_show)
+        self.frame_container.addWidget(current_partner_to_show)
+        self.frame_container.setCurrentWidget(current_partner_to_show)
 styles = '''
 #mainaapplication {
     background: #F4E8D3;
+}
+QLineEdit {
+    height: 30px;
+    background: #67BA80;
 }
 QLabel {
     color: #000000;

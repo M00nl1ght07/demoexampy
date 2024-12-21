@@ -77,6 +77,3 @@ class Database():
 
         except Exception as e:
             return []
-# database = Database()
-# print(database.take_partner_information())
-# print(database.sale_sum("Паркет 29"))

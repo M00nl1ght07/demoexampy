@@ -2,6 +2,8 @@
 import pandas as pd
 import psycopg2
 from config import *
+from db.database import Database
+
 
 # Функция отправки данных в таблицу партнеров
 def partners_import(table_name: str, database):
@@ -110,11 +112,8 @@ def material_type_import(table_name: str, database):
 
 
 def insert_table():
-    database = psycopg2.connect(database=db_name,
-                                user=user,
-                                password=password,
-                                host=host,
-                                port=port)
+    database = Database().connect_db()
+
     partners_import("Partners_import.xlsx", database)
     product_type_import("Product_type_import.xlsx", database)
     products_import("Products_import.xlsx", database)
