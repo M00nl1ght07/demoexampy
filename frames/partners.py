@@ -99,7 +99,6 @@ class interface(QFrame):
             self.vbox.addWidget(self.label4)
             self.label4.setObjectName("company_rate")
 
-
             # кнопка
             self.btn = QPushButton("Подробнее")
             self.btn.setObjectName("card_btn")
