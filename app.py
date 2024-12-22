@@ -5,9 +5,10 @@ from PySide6.QtWidgets import (
     QVBoxLayout, QWidget, QApplication, QStackedWidget
 )
 from PySide6.QtCore import QSize
+
+import partnerStaticName
 from frames import partners
 from db import database
-from frames import addPartner
 
 # Класс основного окна
 class MainApplicationClass(QWidget):
@@ -23,11 +24,12 @@ class MainApplicationClass(QWidget):
         self.connection = database.Database()
         # Создание экземпляра фрейма partners и передача его в переменную
         self.partners_frame = partners.interface(self, self)
-        self.addPartner = addPartner.interface_reg_parther(self, self)
+        # self.addPartner = addPartner.interface_reg_parther(self, self)
 
         # Создание контейнера QStackedWidget и добавление в него фрейма partners
         self.frame_container = QStackedWidget()
         self.frame_container.addWidget(self.partners_frame)
+        # self.frame_container.addWidget(self.addPartner)
 
         # Создание вертикального расположения для элементов интерфейса
         self.layout = QVBoxLayout()
@@ -41,14 +43,30 @@ class MainApplicationClass(QWidget):
         self.setObjectName("mainaapplication")
 
     def switch_to_new_frame(self, frame, current_partner_name : str = None):
-        current_partner_to_show = frame(self, self)
-        self.frame_container.removeWidget(current_partner_to_show)
-        self.frame_container.addWidget(current_partner_to_show)
-        self.frame_container.setCurrentWidget(current_partner_to_show)
+        if current_partner_name != None:
+            partnerStaticName.Partner.set_name(current_partner_name)
+
+        current_frame_to_show = frame(self, self)
+
+        self.frame_container.removeWidget(current_frame_to_show)
+
+        self.frame_container.addWidget(current_frame_to_show)
+        self.frame_container.setCurrentWidget(current_frame_to_show)
 styles = '''
 #mainaapplication {
     background: #F4E8D3;
 }
+#PartnerInfo {
+    background: #67BA80;
+    height: 30px;
+    padding-left: 10px;
+}
+#Title {
+    font-size: 20px;
+    font-weight: bold;
+    qproperty-alignment: AlignCenter;
+}
+
 QLineEdit {
     height: 30px;
     background: #67BA80;
@@ -56,8 +74,10 @@ QLineEdit {
 QLabel {
     color: #000000;
     font-size: 20px;
+    font-weight: bold;
     qproperty-alignment: AlignLeft;
-    } 
+} 
+
 QPushButton{
     background: #67BA80;
     color: #000000;
@@ -84,6 +104,7 @@ QPushButton{
 #company_percentage{
     qproperty-alignment: AlignRight;
 }
+
 
 #company_name{
     font-weight: bold;

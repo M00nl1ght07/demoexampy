@@ -1,7 +1,9 @@
 # Импортирование библиотек
 import psycopg2
-from db import config
+from urllib3.packages.six import print_
 
+from db import config
+import checkPartnerData
 
 # Класс для соединения с базой данных
 class Database():
@@ -77,3 +79,135 @@ class Database():
 
         except Exception as e:
             return []
+
+    def partner_add_function(self, partners_data: dict):
+        # ''' Функция добавления партнера в БД '''
+        if not self.connection:
+            return False
+        # Проверка корректности данных
+        if not checkPartnerData.main_func(partners_data):
+            return False
+        try:
+            cursor = self.connection.cursor()
+            query = f'''
+            INSERT INTO partners_import
+            Values (%s, %s, %s, %s, %s, %s, %s, %s)
+            '''
+            values = (
+                partners_data["type"],
+                partners_data["name"],
+                partners_data["director"],
+                partners_data["mail"],
+                partners_data["phone"],
+                partners_data["ur_addr"],
+                partners_data["inn"],
+                partners_data["rate"],
+            )
+
+            cursor.execute(query, values)
+            self.connection.commit()
+            # Закрытие инструмента
+            cursor.close()
+            print("Партнер добавлен")
+            return True
+        except Exception:
+            return False
+
+
+    def update_partner_info_func(self, partner_name: str, partner_data: dict):
+        ''' Функция обновления инфмации партнера '''
+
+        if not self.connection:
+            return False
+        # Проверка корректности данных
+        if not checkPartnerData.main_func(partner_data):
+            return False
+        try:
+            cursor = self.connection.cursor()
+
+            query = f'''
+            Update partners_import
+            set
+            partners_type = '{partner_data["type"]}',
+            partners_name = '{partner_data["name"]}',
+            partners_phone = '{partner_data["phone"]}',
+            partners_inn = '{partner_data["inn"]}',
+            partners_rate = '{partner_data["rate"]}',
+            partners_ur_adress = '{partner_data["ur_addr"]}',
+            partners_email = '{partner_data["mail"]}',
+            partners_director = '{partner_data["director"]}'
+            
+            where partners_name = '{partner_name}';
+'''
+
+            cursor.execute(query)
+            self.connection.commit()
+            cursor.close()
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    def take_current_partner_info(self, partner_name: str):
+        ''' Получение инфомраци по конкретному партнеру'''
+        if not self.connection:
+            return []
+
+        try:
+            cursor = self.connection.cursor()
+            query = f'''
+            SELECT partners_name, partners_phone, partners_type, partners_email,
+            partners_ur_adress, partners_inn, partners_rate, partners_director
+            FROM partners_import
+            where partners_name = '{partner_name}'
+            '''
+
+            cursor.execute(query)
+
+            partner_data = []
+            for row in cursor.fetchall():
+                partner_data.append({
+                    "name": row[0].strip(),
+                    "phone": row[1].strip(),
+                    "type": row[2].strip(),
+                    "mail": row[3].strip(),
+                    "ur_addr": row[4].strip(),
+                    "inn": row[5].strip(),
+                    "rate": row[6],
+                    "director": row[7].strip(),
+                })
+            cursor.close()
+            return partner_data
+
+        except Exception:
+            return []
+
+# db = Database()
+# print(db.take_partner_information())
+# print(db.sale_sum("Паркет 29"))
+#
+# partner_data = {
+#     "type": "ЗАО",
+#     "name": "Богов редактор",
+#     "director": "Иванов Иван Иванович",
+#     "mail": "pochta@mail.ru",
+#     "phone": "940 123 45 67",
+#     "ur_addr": "199933, Москва, ул. Тверская",
+#     "inn": "1234567890",
+#     "rate": 8
+# }
+# print(db.partner_add_function(partner_data))
+#
+# updated_data = {
+#     "type": "ООО",
+#     "name": "Редактор",
+#     "director": "Петров Петр Петрович",
+#     "mail": "pochta2@mail.ru",
+#     "phone": "940 111 22 33",
+#     "ur_addr": "199934, Москва, ул. Новая",
+#     "inn": "1234567891",
+#     "rate": 7
+# }
+# print(db.update_partner_info_func("Паркет31", updated_data))
+#
+# print(db.take_current_partner_info("База Строитель"))

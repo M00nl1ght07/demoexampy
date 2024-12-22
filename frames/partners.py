@@ -6,7 +6,10 @@ from PySide6.QtWidgets import (
     QLabel,
     QScrollArea, QHBoxLayout
 )
-from frames import addPartner
+
+import partnerStaticName
+from frames import addPartner, partnerinfo
+
 
 class interface(QFrame):
     def __init__ (self, parent, controller):
@@ -102,6 +105,7 @@ class interface(QFrame):
             # кнопка
             self.btn = QPushButton("Подробнее")
             self.btn.setObjectName("card_btn")
+            self.btn.clicked.connect(self.open_single_partner)
             self.vbox.addWidget(self.btn)
 
             # добавление карточки в лайаут для карточки
@@ -125,3 +129,15 @@ class interface(QFrame):
         if (count > 10000):
             return 5
         return 5
+
+    def open_single_partner(self):
+        sender = self.sender()
+
+        # Извлекаем имя партнёра из карточки
+        partner_name = sender.parent().findChild(QLabel, "company_name").text().split("|")[-1].strip()
+
+        # Устанавливаем имя партнёра
+        partnerStaticName.Partner.set_name(partner_name)
+
+        # Переключаем фрейм
+        self.controller.switch_to_new_frame(partnerinfo.PartnerCardFullInfo, partner_name)
