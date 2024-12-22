@@ -27,12 +27,14 @@ class interface_reg_parther(QFrame):
 
         self.widgets_layout_conainer.addWidget(QLabel("Введите тип партнера (ООО, ОАО, ПАО, ЗАО)"))
         self.input_partner_type = self.create_patern_QLineEdit("ООО")
+        self.input_partner_type.setMaxLength(3)
 
         self.widgets_layout_conainer.addWidget(QLabel("Введите имя директора"))
         self.input_partner_director = self.create_patern_QLineEdit("Ввод имени директора")
 
         self.widgets_layout_conainer.addWidget(QLabel("Введите телефон (в формате +7 xхх ххх хх хх)"))
         self.input_partner_phone = self.create_patern_QLineEdit("+7 999 777 66 55")
+        self.input_partner_phone.setMaxLength(13)
 
         self.widgets_layout_conainer.addWidget(QLabel("Введите почту (в формате example@mail.ru)"))
         self.input_partner_mail = self.create_patern_QLineEdit("example@mail.ru")
@@ -42,9 +44,11 @@ class interface_reg_parther(QFrame):
 
         self.widgets_layout_conainer.addWidget(QLabel("Введите инн (в формате XXXXXXXXXX)"))
         self.input_partner_inn = self.create_patern_QLineEdit("7656478391")
+        self.input_partner_inn.setMaxLength(10)
 
         self.widgets_layout_conainer.addWidget(QLabel("Введите рейтинг (X)"))
         self.input_partner_rate = self.create_patern_QLineEdit("9")
+        self.input_partner_rate.setMaxLength(2)
 
         self.btn_add_partner_to_db = QPushButton("Добавить партнера")
         self.btn_add_partner_to_db.clicked.connect(self.add_partner_to_db)

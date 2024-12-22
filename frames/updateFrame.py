@@ -46,9 +46,11 @@ class UpdatePartnerFrame(QFrame):
 
         self.create_text_enter_hint("Рейтинг партнера (X)")
         self.partner_rate_entry = self.create_line_pattern(str(self.single_partner_info[0]["rate"]))
+        self.partner_rate_entry.setMaxLength(2)
 
         self.create_text_enter_hint("Тип партнера (ООО, ОАО, ПАО, ЗАО)")
         self.partner_type_entry = self.create_line_pattern(self.single_partner_info[0]["type"])
+        self.partner_type_entry.setMaxLength(3)
 
         self.create_text_enter_hint("Директор (в формате Фамилия Имя Отчество)")
         self.partner_director_entry = self.create_line_pattern(self.single_partner_info[0]["director"])
