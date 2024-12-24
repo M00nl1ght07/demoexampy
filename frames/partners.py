@@ -112,9 +112,6 @@ class interface(QFrame):
             self.card_layout.addWidget(self.partner_card)
         return self.scroll_area_widget_container
 
-    # def ptint_btn_obj_name(self):
-    #     sender = self.sender()
-    #     print("button name: ", sender.objectName())
     def open_new_frame(self):
         self.controller.switch_to_new_frame(addPartner.interface_reg_parther)
 

@@ -138,7 +138,7 @@ class Database():
             partners_director = '{partner_data["director"]}'
             
             where partners_name = '{partner_name}';
-'''
+            '''
 
             cursor.execute(query)
             self.connection.commit()
