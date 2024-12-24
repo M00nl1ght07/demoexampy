@@ -52,6 +52,14 @@ class MainApplicationClass(QWidget):
 
         self.frame_container.addWidget(current_frame_to_show)
         self.frame_container.setCurrentWidget(current_frame_to_show)
+
+    def restoreTable(self, frame_class, partner_name=None):
+        current_frame = self.frame_container.currentWidget()
+        self.frame_container.removeWidget(current_frame)
+        new_frame = frame_class(self, self)
+        self.frame_container.addWidget(new_frame)
+        self.frame_container.setCurrentWidget(new_frame)
+
 styles = '''
 #mainaapplication {
     background: #F4E8D3;

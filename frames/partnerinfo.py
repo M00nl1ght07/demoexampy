@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (QVBoxLayout, QLabel, QFrame, QPushButton)
-from frames import updateFrame, partners
+from frames import updateFrame, partners, getHistory
 import partnerStaticName
 
 
@@ -49,6 +49,12 @@ class PartnerCardFullInfo(QFrame):
             lambda : self.value_to_use_main_application_self.switch_to_new_frame(partners.interface)
         )
         self.main_layout.addWidget(self.btn_back)
+
+        self.buttonHistory = QPushButton("История", objectName="buttonHistory")
+        self.buttonHistory.clicked.connect(
+            lambda : self.value_to_use_main_application_self.switch_to_new_frame(getHistory.HistoryFrame)
+        )
+        self.main_layout.addWidget(self.buttonHistory)
 
 
         self.update_btn = QPushButton("Обновить данные о патнере")

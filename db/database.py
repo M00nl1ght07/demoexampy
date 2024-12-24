@@ -182,9 +182,50 @@ class Database():
         except Exception:
             return []
 
+    def get_history(self, partnername: str):
+        if not self.connection:
+            print("Нет соединения с базой данных.")
+            return []
+
+        try:
+            cursor = self.connection.cursor()
+            query = """
+                    SELECT 
+                        p.product_import_name AS productname,
+                        pr.partners_name AS partnername,
+                        h.partner_products_count AS quantity,
+                        h.partners_sale_date AS saledate
+                    FROM 
+                        partner_products_import h
+                    JOIN 
+                        products_import p ON h.partner_product_name_fk = p.product_import_name
+                    JOIN 
+                        partners_import pr ON h.partner_name_fk = pr.partners_name
+                    WHERE 
+                        pr.partners_name = %s;
+                """
+
+            cursor.execute(query, (partnername,))
+            history = [
+                {
+                    "productname": row[0].strip(),
+                    "partnername": row[1].strip(),
+                    "quantity": row[2],
+                    "saleDate": row[3]
+                }
+                for row in cursor.fetchall()
+            ]
+
+            cursor.close()
+            return history
+        except Exception as e:
+            print(f"Ошибка выполнения запроса: {e}")
+            return []
+
 # db = Database()
 # print(db.take_partner_information())
 # print(db.sale_sum("Паркет 29"))
+# print(db.get_history("Паркет 29"))
 #
 # partner_data = {
 #     "type": "ЗАО",
